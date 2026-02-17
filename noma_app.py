@@ -1,17 +1,18 @@
-import sqlite3 as db
-import tkinter as tk
-from tkinter import ttk, messagebox
+import sqlite3 as db 
+import tkinter as tk  
+from tkinter import ttk, messagebox  
 
-DB_PATH = "E:/2025_2026/12_klase/Matule/auto_noma.db"
-conn = db.connect(DB_PATH)
-cursor = conn.cursor()
+DB_PATH = "E:/2025_2026/12_klase/Matule/auto_noma.db"  
+conn = db.connect(DB_PATH)  
+cursor = conn.cursor()  
 
-AUTO_TIPI = ["Econom", "Comfort", "Business"]
+AUTO_TIPI = ["Econom", "Comfort", "Business"]  # Saraksts ar iepriekš definētiem auto tipiem
 
-def fetch_ids(sql):
+def fetch_ids(sql):  # Funkcija ID iegūšanai no datubāzes pēc SQL vaicājuma
     cursor.execute(sql)
     return [str(r[0]) for r in cursor.fetchall()]
 
+# Iegūst lietotāja definēto tabulu sarakstu no datubāzes
 cursor.execute("""
 SELECT name FROM sqlite_master
 WHERE type='table' AND name NOT LIKE 'sqlite_%'
@@ -23,11 +24,13 @@ root = tk.Tk()
 root.title("Auto Noma")
 root.geometry("1000x720")
 
+
 style = ttk.Style()
 style.theme_use("clam")
 style.configure("Treeview.Heading", font=("Segoe UI", 10, "bold"))
 style.configure("TButton", padding=6)
 style.configure("TLabel", font=("Segoe UI", 10))
+
 
 top = ttk.Frame(root, padding=10)
 top.pack(fill="x")
@@ -40,11 +43,13 @@ table_combo = ttk.Combobox(
 )
 table_combo.pack(side="left", padx=8)
 
+# Rāmis meklēšanas funkcionalitātei
 search_box = ttk.LabelFrame(top, text="Klienta meklēšana", padding=6)
 search_box.pack(side="left", padx=20)
 search_entry = ttk.Entry(search_box, width=20)
 search_entry.pack(side="left", padx=5)
 
+# Vidējais rāmis tabulas attēlošanai
 mid = ttk.Frame(root, padding=(10, 0))
 mid.pack(fill="both", expand=True)
 
@@ -55,6 +60,7 @@ scroll = ttk.Scrollbar(mid, orient="vertical", command=tree.yview)
 scroll.pack(side="right", fill="y")
 tree.configure(yscrollcommand=scroll.set)
 
+# Apakšējais rāmis formai un pogām
 bottom = ttk.Frame(root, padding=10)
 bottom.pack(fill="x")
 
@@ -64,7 +70,7 @@ form.pack(fill="x")
 entries = {}
 columns = []
 
-def load_table(*_):
+def load_table(*_):  # Funkcija tabulas datu ielādei un attēlošanai
     global columns, entries
     table = table_var.get()
 
@@ -104,7 +110,7 @@ def load_table(*_):
             cb.grid(row=i//3, column=(i%3)*2+1, padx=5)
             entries[c] = cb
 
-            def on_auto_select(event):
+            def on_auto_select(event):  # Notikumu apstrādātājs auto atlasei, lai automātiski aizpildītu saistītos laukus
                 auto = cb.get()
                 if not auto:
                     return
@@ -123,7 +129,6 @@ def load_table(*_):
 
             cb.bind("<<ComboboxSelected>>", on_auto_select)
             entries[c] = cb
-
 
         elif table == "Nomas" and c == "tips_id":
             cb = ttk.Combobox(form, values=fetch_ids('SELECT tips_id FROM "Auto tipi"'), state="readonly")
@@ -146,7 +151,7 @@ def load_table(*_):
             e.grid(row=i//3, column=(i%3)*2+1, padx=5)
             entries[c] = e
 
-def search_client():
+def search_client():  # Funkcija klientu meklēšanai tabulā 'Nomas'
     name = search_entry.get().strip()
     if not name:
         return
@@ -193,7 +198,7 @@ def search_client():
     for r in cursor.fetchall():
         tree.insert("", "end", values=r)
 
-def add_row():
+def add_row():  # Funkcija jaunas rindas pievienošanai tabulai
     table = table_var.get()
     values = []
 
