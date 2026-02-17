@@ -8,7 +8,7 @@ cursor = conn.cursor()
 
 AUTO_TIPI = ["Econom", "Comfort", "Business"]  # Saraksts ar iepriekš definētiem auto tipiem
 
-def fetch_ids(sql):  # Funkcija ID iegūšanai no datubāzes pēc SQL vaicājuma. Atgriež sarakstu ar ID kā virknēm.
+def fetch_ids(sql):  # Funkcija ID iegūšanai no datubāzes pēc SQL vaicājuma.
     cursor.execute(sql)
     return [str(r[0]) for r in cursor.fetchall()]
 
@@ -236,4 +236,5 @@ load_table()
 
 root.mainloop()
 conn.close()
+
 
