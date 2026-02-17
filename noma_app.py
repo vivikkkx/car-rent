@@ -69,7 +69,7 @@ form.pack(fill="x")
 entries = {}
 columns = []
 
-def load_table(*_):  # Funkcija tabulas datu ielādei un attēlošanai. Iegūst kolonnas, attēlo datus Treeview, veido dinamisku ievades formu ar logrīkiem (Combobox vai Entry) katrai kolonnai. Speciāli apstrādā laukus tabulai "Nomas" (piem., auto aizpilde).
+def load_table(*_):  # Funkcija tabulas datu ielādei un attēlošanai. Iegūst kolonnas, attēlo datus, veido dinamisku ievades formu
     global columns, entries
     table = table_var.get()
 
@@ -109,7 +109,7 @@ def load_table(*_):  # Funkcija tabulas datu ielādei un attēlošanai. Iegūst 
             cb.grid(row=i//3, column=(i%3)*2+1, padx=5)
             entries[c] = cb
 
-            def on_auto_select(event):  # Iekšējā funkcija notikumu apstrādei auto atlasei. Automātiski aizpilda saistītos laukus (tips_id, auto_tips) no datubāzes, pamatojoties uz izvēlēto auto_id.
+            def on_auto_select(event):  # Iekšējā funkcija notikumu apstrādei auto atlasei. Automātiski aizpilda saistītos laukus
                 auto = cb.get()
                 if not auto:
                     return
@@ -236,3 +236,4 @@ load_table()
 
 root.mainloop()
 conn.close()
+
